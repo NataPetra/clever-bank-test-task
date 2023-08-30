@@ -1,12 +1,10 @@
 package by.nata.dao.api;
 
-import by.nata.dao.entity.Account;
-
-import java.math.BigDecimal;
+import by.nata.dto.AccountDto;
 
 public interface IAccountDao {
 
-    Account get (String accountNumber);
-    void update(int id, Account account);
+    AccountDto get (String accountNumber);
+    void updateAmount(int id, AccountDto accountDto);
 
 }
