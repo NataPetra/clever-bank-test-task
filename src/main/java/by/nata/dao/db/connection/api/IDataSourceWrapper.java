@@ -1,4 +1,4 @@
-package by.nata.db.connection.api;
+package by.nata.dao.db.connection.api;
 
 import java.sql.Connection;
 import java.sql.SQLException;
