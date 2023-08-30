@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <Configuration monitorInterval="600">
+        <Properties>
+            <Property name="filename">log.log</Property>
+            <Property name="pattern_file">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{5} - %msg%n</Property>
+            <Property name="pattern_console">%r [%t] %-5level %logger{1} - %msg%n</Property>
+        </Properties>
+        
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${pattern_console}"/>
+            </Console>
+            <File name="File" fileName="${filename}" bufferedIO="true" append="true">
+                <PatternLayout pattern="${pattern_file}"/>
+            </File>
+        </Appenders>
+        
+        <Loggers>
+            <Root level="debug">
+                <AppenderRef ref="Console" level="debug"/>
+                <AppenderRef ref="File" level="info"/>
+            </Root>
+        </Loggers>
+    </Configuration>
