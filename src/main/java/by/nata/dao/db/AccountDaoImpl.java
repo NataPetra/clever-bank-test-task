@@ -14,6 +14,8 @@ public class AccountDaoImpl implements IAccountDao {
 
     private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM account WHERE account_number = ?";
     private final String SQL_UPDATE_AMOUNT = "UPDATE account SET amount = ? WHERE account_id = ?;";
+    private final String SQL_IS_CONTAIN = "SELECT account_id FROM account WHERE account_number = ?;";
+    private final String SQL_GET_BALANCE = "SELECT amount FROM account WHERE account_number = ?;";
     private final IDataSourceWrapper dataSourceWrapper;
 
     public AccountDaoImpl(IDataSourceWrapper dataSourceWrapper) {
@@ -41,18 +43,56 @@ public class AccountDaoImpl implements IAccountDao {
     }
 
     @Override
-    public void updateAmount(Long id, AccountDto accountDto) {
+    public void updateAmount(AccountDto accountDto) {
         BigDecimal amount = accountDto.amount();
 
         try(Connection connection = dataSourceWrapper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT)){
 
             preparedStatement.setBigDecimal(1, amount);
-            preparedStatement.setLong(2, id);
+            preparedStatement.setLong(2, accountDto.id());
             preparedStatement.executeUpdate();
 
         }catch (SQLException e){
             throw new RuntimeException("Database connection error", e);
         }
+    }
+
+    @Override
+    public boolean isAccountExists(String accountNumber) {
+        boolean result = false;
+
+        try(Connection connection = dataSourceWrapper.getConnection();
+            PreparedStatement statement = connection.prepareStatement(SQL_IS_CONTAIN)){
+
+            statement.setString(1, accountNumber);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                result = true;
+            }
+            resultSet.close();
+
+        }catch (SQLException e){
+            throw new RuntimeException("Database connection error", e);
+        }
+        return result;
+    }
+
+    @Override
+    public BigDecimal checkAccountBalance(String accountNumber) {
+        BigDecimal balance = null;
+        try (Connection connection = dataSourceWrapper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_GET_BALANCE)
+        ) {
+            statement.setString(1,accountNumber);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                balance = resultSet.getBigDecimal("amount");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database connection error", e);
+        }
+        return balance;
     }
 }

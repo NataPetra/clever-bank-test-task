@@ -8,6 +8,9 @@ import java.beans.PropertyVetoException;
 import java.io.FileNotFoundException;
 
 public class DaoProvider implements IDaoProvider {
+
+    private static volatile DaoProvider instance;
+
     @Override
     public IAccountDao accountDao() {
         try {
@@ -17,5 +20,16 @@ public class DaoProvider implements IDaoProvider {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static IDaoProvider getInstance() {
+        if (instance == null) {
+            synchronized (DaoProvider.class) {
+                if (instance == null) {
+                    instance = new DaoProvider();
+                }
+            }
+        }
+        return instance;
     }
 }
