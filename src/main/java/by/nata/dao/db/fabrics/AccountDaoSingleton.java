@@ -6,13 +6,14 @@ import by.nata.dao.db.connection.fabrics.DataSourceSingleton;
 import lombok.NoArgsConstructor;
 
 import java.beans.PropertyVetoException;
+import java.io.FileNotFoundException;
 
 @NoArgsConstructor
 public class AccountDaoSingleton {
 
     private volatile static AccountDaoImpl instance;
 
-    public static IAccountDao getInstance() throws PropertyVetoException {
+    public static IAccountDao getInstance() throws PropertyVetoException, FileNotFoundException {
         if (instance == null) {
             synchronized (AccountDaoSingleton.class) {
                 if (instance == null) {

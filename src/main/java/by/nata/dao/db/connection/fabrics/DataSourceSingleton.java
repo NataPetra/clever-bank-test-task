@@ -4,6 +4,7 @@ import by.nata.dao.db.connection.DataSourceC3PO;
 import by.nata.dao.db.connection.api.IDataSourceWrapper;
 
 import java.beans.PropertyVetoException;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 public class DataSourceSingleton {
@@ -22,7 +23,7 @@ public class DataSourceSingleton {
         }
     }
 
-    public static IDataSourceWrapper getInstance() throws PropertyVetoException {
+    public static IDataSourceWrapper getInstance() throws PropertyVetoException, FileNotFoundException {
         if (instance == null) {
             synchronized (DataSourceSingleton.class) {
                 if (instance == null) {
