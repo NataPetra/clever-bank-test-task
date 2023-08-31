@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class AccountDaoImpl implements IAccountDao {
 
     private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM account WHERE account_number = ?";
-    private final String SQL_UPDATE_AMOUNT = "UPDATE account SET amount = ? WHERE id = ?;";
+    private final String SQL_UPDATE_AMOUNT = "UPDATE account SET amount = ? WHERE account_id = ?;";
     private final IDataSourceWrapper dataSourceWrapper;
 
     public AccountDaoImpl(IDataSourceWrapper dataSourceWrapper) {
@@ -41,14 +41,14 @@ public class AccountDaoImpl implements IAccountDao {
     }
 
     @Override
-    public void updateAmount(int id, AccountDto accountDto) {
+    public void updateAmount(Long id, AccountDto accountDto) {
         BigDecimal amount = accountDto.amount();
 
         try(Connection connection = dataSourceWrapper.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT)){
 
             preparedStatement.setBigDecimal(1, amount);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
 
         }catch (SQLException e){
