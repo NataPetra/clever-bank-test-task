@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDaoImpl implements IAccountDao {
 
@@ -16,6 +18,7 @@ public class AccountDaoImpl implements IAccountDao {
     private final String SQL_UPDATE_AMOUNT = "UPDATE account SET amount = ? WHERE account_id = ?;";
     private final String SQL_IS_CONTAIN = "SELECT account_id FROM account WHERE account_number = ?;";
     private final String SQL_GET_BALANCE = "SELECT amount FROM account WHERE account_number = ?;";
+    private final String SQL_GET_ACCOUNTS = "SELECT account_number FROM account;";
     private final IDataSourceWrapper dataSourceWrapper;
 
     public AccountDaoImpl(IDataSourceWrapper dataSourceWrapper) {
@@ -94,5 +97,22 @@ public class AccountDaoImpl implements IAccountDao {
             throw new RuntimeException("Database connection error", e);
         }
         return balance;
+    }
+
+    @Override
+    public List<String> getAccounts() {
+        List<String> accounts= new ArrayList<>();
+        try (Connection connection =dataSourceWrapper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ACCOUNTS);
+             ResultSet resultSet = preparedStatement.executeQuery()
+        ) {
+            while (resultSet.next()){
+                String account = resultSet.getString("account_number");
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database connection error", e);
+        }
+        return accounts;
     }
 }

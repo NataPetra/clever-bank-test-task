@@ -1,6 +1,9 @@
 package by.nata.service.api;
 
 import by.nata.dto.AccountDto;
+import by.nata.dto.CheckBillingsDto;
+
+import java.util.List;
 
 public interface IAccountService {
 
@@ -8,4 +11,5 @@ public interface IAccountService {
     AccountDto withdrawal(String account, Double sum);
     boolean isNeedPayInterest(String account);
     void payInterest(String account);
+    List<CheckBillingsDto> checkingAccounts();
 }

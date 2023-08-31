@@ -65,6 +65,23 @@ liquibase {
     }
 }
 
+task('liq') {
+    println "executing dev"
+    doFirst() {
+        liquibase {
+            activities {
+                main {
+                    changeLogFile "$buildDir/changelog-master.xml"
+                    url "jdbc:postgresql://localhost:5432/clever-bank"
+                    username "postgres"
+                    password "postgres"
+                }
+            }
+        }
+    }
+}
+
+
 //task('deploy changeLog') {
 //    doFirst() {
 //        liquibase {

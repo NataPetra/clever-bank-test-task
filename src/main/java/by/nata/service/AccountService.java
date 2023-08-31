@@ -4,6 +4,7 @@ import by.nata.config.Config;
 import by.nata.config.ConfigHandler;
 import by.nata.dao.api.IAccountDao;
 import by.nata.dto.AccountDto;
+import by.nata.dto.CheckBillingsDto;
 import by.nata.exception.InsufficientFundsException;
 import by.nata.service.api.IAccountService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Objects.isNull;
 
@@ -79,6 +82,18 @@ public class AccountService implements IAccountService {
         BigDecimal  multiply= divide.multiply(BigDecimal.valueOf(interest));
         Double result = balance.add(multiply).doubleValue();
         withdrawal(account, result);
+    }
+
+    @Override
+    public List<CheckBillingsDto> checkingAccounts() {
+        List<CheckBillingsDto> checkBillingsDtos = new ArrayList<>();
+        List<String> accounts = dao.getAccounts();
+        for (String account: accounts) {
+            if(isNeedPayInterest(account)){
+                checkBillingsDtos.add(new CheckBillingsDto(true,account));
+            }
+        }
+        return checkBillingsDtos;
     }
 
     private void checkArgs(String account, Double sum) {
