@@ -36,6 +36,7 @@ public class AccountService implements IAccountService {
             BigDecimal updatedAmount = accountDto.amount().add(BigDecimal.valueOf(sum));
             updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountAdo);
+            //BankCheck.saveCheck(TransactionEnum.REFILL, );
         } else {
             throw new RuntimeException("Something went wrong");
         }
@@ -62,9 +63,6 @@ public class AccountService implements IAccountService {
 
     @Override
     public boolean isNeedPayInterest(String account) {
-        if (!dao.isAccountExists(account)){
-            throw new IllegalArgumentException(MESSAGE_FOR_ABSENT_ACCOUNT);
-        }
         BigDecimal balance = dao.checkAccountBalance(account);
         Temporal lastDayOfMonth = TemporalAdjusters.lastDayOfMonth().adjustInto(LocalDate.now());
         LocalDate now = LocalDate.now();
