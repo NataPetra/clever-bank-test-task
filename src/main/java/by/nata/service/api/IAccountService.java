@@ -8,8 +8,12 @@ import java.util.List;
 public interface IAccountService {
 
     AccountDto refill(String account, Double sum);
+
     AccountDto withdrawal(String account, Double sum);
+
     boolean isNeedPayInterest(String account);
+
     void payInterest(String account);
+
     List<CheckBillingsDto> checkingAccounts();
 }

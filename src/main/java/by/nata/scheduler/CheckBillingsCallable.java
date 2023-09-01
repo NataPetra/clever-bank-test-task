@@ -14,7 +14,7 @@ public class CheckBillingsCallable implements Callable<Void> {
     IAccountService instanceService = AccountServiceSingleton.getInstance();
 
     @Override
-    public Void call() throws Exception {
+    public Void call() {
         List<CheckBillingsDto> checkBillingsDtos = instanceService.checkingAccounts();
         for (CheckBillingsDto checkBilling : checkBillingsDtos) {
             if (Boolean.TRUE.equals(checkBilling.isNeedPayInterest())) {

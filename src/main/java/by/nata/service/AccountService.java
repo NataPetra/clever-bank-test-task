@@ -32,7 +32,7 @@ public class AccountService implements IAccountService {
         checkArgs(account, sum);
         AccountDto accountDto = dao.get(account);
         AccountDto updateAccountAdo;
-        if (accountDto!=null){
+        if (accountDto != null) {
             BigDecimal updatedAmount = accountDto.amount().add(BigDecimal.valueOf(sum));
             updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountAdo);
@@ -48,8 +48,8 @@ public class AccountService implements IAccountService {
         checkArgs(account, sum);
         AccountDto accountDto = dao.get(account);
         AccountDto updateAccountAdo;
-        if (accountDto!=null){
-            if (accountDto.amount().compareTo(BigDecimal.valueOf(sum)) < 0){
+        if (accountDto != null) {
+            if (accountDto.amount().compareTo(BigDecimal.valueOf(sum)) < 0) {
                 throw new InsufficientFundsException("You do not have enough funds to write off");
             }
             BigDecimal updatedAmount = accountDto.amount().subtract(BigDecimal.valueOf(sum));
@@ -77,7 +77,7 @@ public class AccountService implements IAccountService {
         Integer interest = config.getInterestToBeCharged();
         BigDecimal balance = dao.checkAccountBalance(account);
         BigDecimal divide = balance.divide(BigDecimal.valueOf(100));
-        BigDecimal  multiply= divide.multiply(BigDecimal.valueOf(interest));
+        BigDecimal multiply = divide.multiply(BigDecimal.valueOf(interest));
         Double result = balance.add(multiply).doubleValue();
         withdrawal(account, result);
     }
@@ -86,9 +86,9 @@ public class AccountService implements IAccountService {
     public List<CheckBillingsDto> checkingAccounts() {
         List<CheckBillingsDto> checkBillingsDtos = new ArrayList<>();
         List<String> accounts = dao.getAccounts();
-        for (String account: accounts) {
-            if(isNeedPayInterest(account)){
-                checkBillingsDtos.add(new CheckBillingsDto(true,account));
+        for (String account : accounts) {
+            if (isNeedPayInterest(account)) {
+                checkBillingsDtos.add(new CheckBillingsDto(true, account));
             }
         }
         return checkBillingsDtos;
@@ -98,7 +98,7 @@ public class AccountService implements IAccountService {
         if (isNull(account) || sum <= 0) {
             throw new IllegalArgumentException("You did not enter an account number or an incorrect amount");
         }
-        if (!dao.isAccountExists(account)){
+        if (!dao.isAccountExists(account)) {
             throw new IllegalArgumentException(MESSAGE_FOR_ABSENT_ACCOUNT);
         }
     }

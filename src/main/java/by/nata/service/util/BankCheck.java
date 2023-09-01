@@ -17,27 +17,27 @@ public class BankCheck {
     public static void saveCheck(TransactionEnum transactionEnum, AccountCheckDto accountCheckDto) throws IOException {
 
         File dir = new File("../clever-bank-test-task/check");
-        if (!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdir();
         }
 
         final Random random = new Random();
         int nextInt = random.nextInt(1000);
-        String fileName="../clever-bank-test-task/check/check" + nextInt + ".txt";
+        String fileName = "../clever-bank-test-task/check/check" + nextInt + ".txt";
         String checkExampleForTransfer =
                 """
-                -----------------------------------------
-                |           Банковский чек              |
-                | Чек:                    %13s |
-                | %s                   %s |
-                | Тип транзакции:            %13s |
-                | Банк отправителя:       %13s |
-                | Банк получателя:        %13s |
-                | Счет отправителя:       %13s |
-                | Счет получателя:        %13s |
-                | Сумма:                  %13s |
-                -----------------------------------------
-                """;
+                        -----------------------------------------
+                        |           Банковский чек              |
+                        | Чек:                    %13s |
+                        | %s                   %s |
+                        | Тип транзакции:            %13s |
+                        | Банк отправителя:       %13s |
+                        | Банк получателя:        %13s |
+                        | Счет отправителя:       %13s |
+                        | Счет получателя:        %13s |
+                        | Сумма:                  %13s |
+                        -----------------------------------------
+                        """;
 
 
         String resultCheckForTransfer = checkExampleForTransfer.formatted(
@@ -54,16 +54,16 @@ public class BankCheck {
 
         String checkExample =
                 """
-                -----------------------------------------
-                |           Банковский чек              |
-                | Чек:                    %13s |
-                | %s                   %s |
-                | Тип транзакции:            %13s |
-                | Банк получателя:        %13s |
-                | Счет получателя:        %13s |
-                | Сумма:                  %13s |
-                -----------------------------------------
-                """;
+                        -----------------------------------------
+                        |           Банковский чек              |
+                        | Чек:                    %13s |
+                        | %s                   %s |
+                        | Тип транзакции:            %13s |
+                        | Банк получателя:        %13s |
+                        | Счет получателя:        %13s |
+                        | Сумма:                  %13s |
+                        -----------------------------------------
+                        """;
 
 
         String resultCheck = checkExample.formatted(
@@ -77,8 +77,8 @@ public class BankCheck {
         );
 
         try (FileWriter fileWriter = new FileWriter(fileName);
-             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
-            if(transactionEnum.equals(TransactionEnum.TRANSFER)){
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            if (transactionEnum.equals(TransactionEnum.TRANSFER)) {
                 bufferedWriter.append(resultCheckForTransfer);
             } else {
                 bufferedWriter.append(resultCheck);

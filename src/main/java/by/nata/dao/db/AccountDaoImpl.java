@@ -14,11 +14,11 @@ import java.util.List;
 
 public class AccountDaoImpl implements IAccountDao {
 
-    private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM account WHERE account_number = ?";
-    private final String SQL_UPDATE_AMOUNT = "UPDATE account SET amount = ? WHERE account_id = ?;";
-    private final String SQL_IS_CONTAIN = "SELECT account_id FROM account WHERE account_number = ?;";
-    private final String SQL_GET_BALANCE = "SELECT amount FROM account WHERE account_number = ?;";
-    private final String SQL_GET_ACCOUNTS = "SELECT account_number FROM account;";
+    private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM clever_bank.account WHERE account_number = ?";
+    private final String SQL_UPDATE_AMOUNT = "UPDATE clever_bank.account SET amount = ? WHERE account_id = ?;";
+    private final String SQL_IS_CONTAIN = "SELECT account_id FROM clever_bank.account WHERE account_number = ?;";
+    private final String SQL_GET_BALANCE = "SELECT amount FROM clever_bank.account WHERE account_number = ?;";
+    private final String SQL_GET_ACCOUNTS = "SELECT account_number FROM clever_bank.account;";
     private final IDataSourceWrapper dataSourceWrapper;
 
     public AccountDaoImpl(IDataSourceWrapper dataSourceWrapper) {
@@ -31,10 +31,10 @@ public class AccountDaoImpl implements IAccountDao {
         try (Connection connection = dataSourceWrapper.getConnection();
              PreparedStatement statement = connection.prepareStatement(SQL_GET_AMOUNT)
         ) {
-            statement.setString(1,accountNumber);
+            statement.setString(1, accountNumber);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
-                accountDto= new AccountDto(
+            while (resultSet.next()) {
+                accountDto = new AccountDto(
                         resultSet.getLong("account_id"),
                         resultSet.getString("account_number"),
                         resultSet.getBigDecimal("amount"));
@@ -49,14 +49,14 @@ public class AccountDaoImpl implements IAccountDao {
     public void updateAmount(AccountDto accountDto) {
         BigDecimal amount = accountDto.amount();
 
-        try(Connection connection = dataSourceWrapper.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT)){
+        try (Connection connection = dataSourceWrapper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT)) {
 
             preparedStatement.setBigDecimal(1, amount);
             preparedStatement.setLong(2, accountDto.id());
             preparedStatement.executeUpdate();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Database connection error", e);
         }
     }
@@ -65,18 +65,18 @@ public class AccountDaoImpl implements IAccountDao {
     public boolean isAccountExists(String accountNumber) {
         boolean result = false;
 
-        try(Connection connection = dataSourceWrapper.getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL_IS_CONTAIN)){
+        try (Connection connection = dataSourceWrapper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_IS_CONTAIN)) {
 
             statement.setString(1, accountNumber);
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 result = true;
             }
             resultSet.close();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Database connection error", e);
         }
         return result;
@@ -88,9 +88,9 @@ public class AccountDaoImpl implements IAccountDao {
         try (Connection connection = dataSourceWrapper.getConnection();
              PreparedStatement statement = connection.prepareStatement(SQL_GET_BALANCE)
         ) {
-            statement.setString(1,accountNumber);
+            statement.setString(1, accountNumber);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 balance = resultSet.getBigDecimal("amount");
             }
         } catch (SQLException e) {
@@ -101,12 +101,12 @@ public class AccountDaoImpl implements IAccountDao {
 
     @Override
     public List<String> getAccounts() {
-        List<String> accounts= new ArrayList<>();
-        try (Connection connection =dataSourceWrapper.getConnection();
+        List<String> accounts = new ArrayList<>();
+        try (Connection connection = dataSourceWrapper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_ACCOUNTS);
              ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 String account = resultSet.getString("account_number");
                 accounts.add(account);
             }
