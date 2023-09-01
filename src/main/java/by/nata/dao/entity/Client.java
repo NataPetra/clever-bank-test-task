@@ -1,5 +1,6 @@
 package by.nata.dao.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,10 +45,8 @@ public class Client {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "client_counts",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id"))
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
     private List<Account> accounts = new ArrayList<>();
 
     @Override

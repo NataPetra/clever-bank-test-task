@@ -48,7 +48,7 @@ public class BankCheck {
                 accountCheckDto.senderBank(),
                 accountCheckDto.beneficiaryBank(),
                 accountCheckDto.senderAccount(),
-                accountCheckDto.beneficiaryBank(),
+                accountCheckDto.beneficiaryAccount(),
                 accountCheckDto.sum().toString()
         );
 
