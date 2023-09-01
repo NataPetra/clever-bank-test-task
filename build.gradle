@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.liquibase.gradle' version '2.0.4'
+//    id 'org.liquibase.gradle' version '2.0.4'
 }
 
 group = "by.nata"
@@ -14,6 +14,8 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+//    sqlDriver
+//    liquibase
 }
 
 repositories {
@@ -33,9 +35,9 @@ dependencies {
 //    implementation 'org.liquibase:liquibase-core:4.2.2'
 //    runtimeOnly 'postgresql:postgresql:9.1-901-1.jdbc4'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
-   // implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    // implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
     compileOnly 'org.projectlombok:lombok:1.18.26'
-   // runtimeOnly 'org.postgresql:postgresql'
+    // runtimeOnly 'org.postgresql:postgresql'
     implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
     implementation 'org.quartz-scheduler:quartz:2.3.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
@@ -44,42 +46,59 @@ dependencies {
 
     implementation 'org.postgresql:postgresql:42.6.0'
 
-    liquibaseRuntime 'org.liquibase:liquibase-core:4.2.2'
-    liquibaseRuntime("ch.qos.logback:logback-core:1.2.3")
-    liquibaseRuntime("ch.qos.logback:logback-classic:1.2.3")
-    liquibaseRuntime 'postgresql:postgresql:9.1-901-1.jdbc4'
+//    liquibaseRuntime 'org.liquibase:liquibase-core:4.2.2'
+//    liquibaseRuntime("ch.qos.logback:logback-core:1.2.3")
+//    liquibaseRuntime("ch.qos.logback:logback-classic:1.2.3")
+//    liquibaseRuntime 'postgresql:postgresql:9.1-901-1.jdbc4'
 
+//    sqlDriver 'postgresql:postgresql:9.1-901-1.jdbc4'
+//    liquibaseRuntime 'postgresql:postgresql:9.1-901-1.jdbc4'
+//    liquibaseRuntime 'org.liquibase:liquibase-core:3.2.2'
 }
 
-apply plugin: "org.liquibase.gradle"
+//apply plugin: "org.liquibase.gradle"
 
-liquibase {
-    activities {
-        main {
-            changeLogFile "$buildDir/changelog-master.xml"
-            url "jdbc:postgresql://localhost:5432/clever-bank"
-            username "postgres"
-            password "postgres"
-        }
-        runList = "main"
-    }
-}
+//liquibase {
+//    activities {
+//        main {
+//            changeLogFile "$buildDir/changelog-master.xml"
+//            url "jdbc:postgresql://localhost:5432/clever-bank"
+//            username "postgres"
+//            password "postgres"
+//        }
+//        runList = "main"
+//    }
+//}
 
-task('liq') {
-    println "executing dev"
-    doFirst() {
-        liquibase {
-            activities {
-                main {
-                    changeLogFile "$buildDir/changelog-master.xml"
-                    url "jdbc:postgresql://localhost:5432/clever-bank"
-                    username "postgres"
-                    password "postgres"
-                }
-            }
-        }
-    }
-}
+//task updateDb(type: JavaExec) {
+//    group = "Liquibase"
+//    classpath configurations.liquibaseRuntime
+//    main = "liquibase.integration.commandline.Main"
+//    args "--changeLogFile=resources/db/changelog/changelog-master.xml"
+//    args "--username=postgres"
+//    args "--password=postgres"
+//    args "--url=jdbc:postgresql://localhost:5432/clever-bank"
+//    args "--driver=org.postgresql.Driver"
+//    args "--logLevel=debug"
+//    args "--defaultSchemaName=public"
+//    args "update"
+//}
+
+//task('liq') {
+//    println "executing dev"
+//    doFirst() {
+//        liquibase {
+//            activities {
+//                main {
+//                    changeLogFile "$buildDir/changelog-master.xml"
+//                    url "jdbc:postgresql://localhost:5432/clever-bank"
+//                    username "postgres"
+//                    password "postgres"
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 //task('deploy changeLog') {
@@ -99,6 +118,3 @@ task('liq') {
 tasks.test {
     useJUnitPlatform()
 }
-
-
-

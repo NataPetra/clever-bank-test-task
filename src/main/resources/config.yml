@@ -1,6 +1,6 @@
 !!by.nata.config.Config
 interestToBeCharged: 1
 dbDriver: org.postgresql.Driver
-dbUrl: jdbc:postgresql://localhost:5432/clever-bank
+dbUrl: jdbc:postgresql://localhost:5432/clever_bank
 dbUser: postgres
 dbPassword: postgres
