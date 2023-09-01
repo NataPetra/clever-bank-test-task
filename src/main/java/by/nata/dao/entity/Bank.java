@@ -37,7 +37,7 @@ public class Bank {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "account_id")
     private List<Account> accounts = new ArrayList<>();
 
     @Override

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 
 @Builder(setterPrefix = "with")
@@ -31,15 +32,22 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(name = "account_number", nullable = false)
+    @Column(name = "account_number", nullable = false, unique = true)
     private String accountNumber;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "open_date", nullable = false)
+    private Date openDate;
+
     @ManyToOne
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
     @Override
     public boolean equals(Object o) {
