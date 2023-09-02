@@ -4,6 +4,7 @@ import by.nata.dao.api.ITransactionDao;
 import by.nata.dao.db.connection.api.IDataSourceWrapper;
 import by.nata.dto.TransactionDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 
+@Log4j2
 @RequiredArgsConstructor
 public class TransactionDaoImpl implements ITransactionDao {
 
@@ -93,4 +95,5 @@ public class TransactionDaoImpl implements ITransactionDao {
         }
         return transactionDto;
     }
+
 }
