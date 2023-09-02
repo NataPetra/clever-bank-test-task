@@ -3,10 +3,12 @@ package by.nata.service;
 import by.nata.config.Config;
 import by.nata.config.ConfigHandler;
 import by.nata.dao.api.IAccountDao;
+import by.nata.dao.entity.TransactionEnum;
 import by.nata.dto.AccountDto;
 import by.nata.dto.CheckBillingsDto;
 import by.nata.exception.InsufficientFundsException;
 import by.nata.service.api.IAccountService;
+import by.nata.service.api.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -25,6 +27,8 @@ public class AccountService implements IAccountService {
 
     private final IAccountDao dao;
 
+    private final ITransactionService transactionService;
+
     private static final String MESSAGE_FOR_ABSENT_ACCOUNT = "This account number does not exist";
 
     @Override
@@ -36,7 +40,10 @@ public class AccountService implements IAccountService {
             BigDecimal updatedAmount = accountDto.amount().add(BigDecimal.valueOf(sum));
             updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountAdo);
-            //BankCheck.saveCheck(TransactionEnum.REFILL, );
+            transactionService.saveTransaction(
+                    updateAccountAdo.amount(), updateAccountAdo.id(),
+                    updateAccountAdo.id(), TransactionEnum.REFILL.toString()
+            );
         } else {
             throw new RuntimeException("Something went wrong");
         }
@@ -55,6 +62,10 @@ public class AccountService implements IAccountService {
             BigDecimal updatedAmount = accountDto.amount().subtract(BigDecimal.valueOf(sum));
             updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountAdo);
+            transactionService.saveTransaction(
+                    updateAccountAdo.amount(), updateAccountAdo.id(),
+                    updateAccountAdo.id(), TransactionEnum.WITHDRAWAL.toString()
+            );
         } else {
             throw new RuntimeException("Something went wrong");
         }
