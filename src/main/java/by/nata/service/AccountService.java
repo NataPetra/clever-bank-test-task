@@ -11,6 +11,7 @@ import by.nata.service.api.IAccountService;
 import by.nata.service.api.ITransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
+@Log4j2
 @RequiredArgsConstructor
 public class AccountService implements IAccountService {
 
@@ -40,10 +42,11 @@ public class AccountService implements IAccountService {
         AccountDto updateAccountAdo;
         if (accountDto != null) {
             BigDecimal updatedAmount = accountDto.amount().add(BigDecimal.valueOf(sum));
+            log.info("UserAmount is " + updatedAmount);
             updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountAdo);
             transactionService.saveTransaction(
-                    updateAccountAdo.amount(), updateAccountAdo.id(),
+                    BigDecimal.valueOf(sum), updateAccountAdo.id(),
                     updateAccountAdo.id(), TransactionEnum.REFILL.toString()
             );
         } else {
@@ -65,7 +68,7 @@ public class AccountService implements IAccountService {
             updateAccountDto = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
             dao.updateAmount(updateAccountDto);
             transactionService.saveTransaction(
-                    updateAccountDto.amount(), updateAccountDto.id(),
+                    BigDecimal.valueOf(sum), updateAccountDto.id(),
                     updateAccountDto.id(), TransactionEnum.WITHDRAWAL.toString()
             );
         } else {

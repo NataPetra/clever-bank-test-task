@@ -1,39 +1,130 @@
 package by.nata;
 
-import by.nata.scheduler.job.SimpleJob;
-import org.quartz.CronTrigger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
+import by.nata.scheduler.SchedulerInterest;
+import by.nata.service.api.IAccountService;
+import by.nata.service.fabrics.AccountServiceSingleton;
 import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.impl.StdSchedulerFactory;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
+import java.util.Scanner;
 
 public class Main {
 
-//    public static void main(String[] args) throws SchedulerException {
-//
-//        SchedulerFactory sf = new StdSchedulerFactory();
-//        Scheduler sched = sf.getScheduler();
-//
-//        JobDetail job = newJob(SimpleJob.class)
-//                .withIdentity("job1", "group1")
-//                .build();
-//
-//        CronTrigger trigger = newTrigger()
-//                .withIdentity("trigger1", "group1")
-//                .withSchedule(cronSchedule("0/30 * * * * ?"))
-//                .build();
-//
-//        sched.scheduleJob(job, trigger);
-//
-//        //sched.start();
-//
-//
-//
-//        System.out.println("Hello world!");
-//    }
+    public static final IAccountService accountService;
+
+    static {
+        accountService = AccountServiceSingleton.getInstance();
+    }
+
+    public static void main(String[] args) throws SchedulerException {
+
+        SchedulerInterest.getScheduler().start();
+
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        double userAmount;
+        String account;
+        String sAccount;
+        String bAccount;
+
+        while (true) {
+            System.out.println("\n----------------------");
+            System.out.println("CLEVER  BANK OF  JAVA");
+            System.out.println("----------------------\n");
+            System.out.println("1. Refill.");
+            System.out.println("2. Withdrawal.");
+            System.out.println("3. Transfer to your bank.");
+            System.out.println("4. Transfer to other bank.");
+            System.out.println("5. Exit.");
+            System.out.print("\nEnter your choice : ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter amount : ");
+                    while (!sc.hasNextDouble()) {
+                        System.out.println("Invalid amount. Enter again :");
+                        sc.nextLine();
+                    }
+                    userAmount = sc.nextDouble();
+                    sc.nextLine();
+                    System.out.print("Enter beneficiary account : ");
+                    account = sc.next();
+                    sc.nextLine();
+                    try {
+                        accountService.refill(account, userAmount);
+                    } catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    break;
+                case 2:
+                    System.out.print("Enter amount : ");
+                    while (!sc.hasNextDouble()) {
+                        System.out.println("Invalid amount. Enter again :");
+                        sc.nextLine();
+                    }
+                    userAmount = sc.nextDouble();
+                    sc.nextLine();
+                    System.out.print("Enter account : ");
+                    account = sc.next();
+                    sc.nextLine();
+                    try {
+                        accountService.withdrawal(account, userAmount);
+                    } catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter amount : ");
+                    while (!sc.hasNextDouble()) {
+                        System.out.println("Invalid amount. Enter again :");
+                        sc.nextLine();
+                    }
+                    userAmount = sc.nextDouble();
+                    sc.nextLine();
+                    System.out.print("Enter sender account : ");
+                    sAccount = sc.next();
+                    sc.nextLine();
+                    System.out.print("Enter beneficiary account : ");
+                    bAccount = sc.next();
+                    sc.nextLine();
+                    try {
+                        accountService.transferWithinOneBank(sAccount, bAccount, userAmount);
+                    } catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter amount : ");
+                    while (!sc.hasNextDouble()) {
+                        System.out.println("Invalid amount. Enter again :");
+                        sc.nextLine();
+                    }
+                    userAmount = sc.nextDouble();
+                    sc.nextLine();
+                    System.out.print("Enter sender account : ");
+                    sAccount = sc.next();
+                    sc.nextLine();
+                    System.out.print("Enter beneficiary account : ");
+                    bAccount = sc.next();
+                    sc.nextLine();
+                    try {
+                        accountService.transferWithinDifferentBanks(sAccount, bAccount, userAmount);
+                    } catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    break;
+                case 5:
+                    System.out.println("\nThank you for choosing Clever Bank Of Java.");
+                    System.exit(1);
+                    break;
+                default:
+                    System.out.println("Wrong choice!");
+            }
+        }
+    }
 }

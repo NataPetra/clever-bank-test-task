@@ -38,10 +38,10 @@ public class AccountDaoImpl implements IAccountDao {
             statement.setString(1, accountNumber);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                accountDto = new AccountDto(
-                        resultSet.getLong("account_id"),
-                        resultSet.getString("account_number"),
-                        resultSet.getBigDecimal("amount"));
+                long accountId = resultSet.getLong("account_id");
+                String number = resultSet.getString("account_number");
+                BigDecimal amount = resultSet.getBigDecimal("amount");
+                accountDto = new AccountDto(accountId, number, amount);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Database connection error", e);

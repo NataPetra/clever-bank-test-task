@@ -2,18 +2,14 @@ package by.nata.scheduler.job;
 
 import by.nata.scheduler.CheckBillingsCallable;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
 
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Log4j2
-public class SimpleJob implements Job {
+public class InterestCalculationCheckJob implements Job {
 
     @SneakyThrows
     public void execute(JobExecutionContext context) {
@@ -22,8 +18,5 @@ public class SimpleJob implements Job {
 
         Callable<Void> checkBillingsCallable = new CheckBillingsCallable();
         executorService.submit(checkBillingsCallable);
-
-        JobKey jobKey = context.getJobDetail().getKey();
-        log.info("SimpleJob says: " + jobKey + " executing at " + new Date());
     }
 }
