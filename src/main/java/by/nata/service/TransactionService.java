@@ -7,9 +7,11 @@ import by.nata.service.api.ITransactionService;
 import by.nata.service.util.BankCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 
+@Log4j2
 @RequiredArgsConstructor
 public class TransactionService implements ITransactionService {
 
@@ -18,6 +20,7 @@ public class TransactionService implements ITransactionService {
     @SneakyThrows
     @Override
     public void saveTransaction(BigDecimal amount, Long sId, Long bId, String type) {
+        log.info("Call saveTransaction() method from service");
         dao.create(amount, sId, bId, type);
         TransactionDto lastTransaction = dao.getLast();
         BankCheck.saveCheck(TransactionEnum.valueOf(type), lastTransaction);

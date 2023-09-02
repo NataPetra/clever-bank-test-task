@@ -2,6 +2,7 @@ package by.nata.service.util;
 
 import by.nata.dao.entity.TransactionEnum;
 import by.nata.dto.TransactionDto;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
+@Log4j2
 public class BankCheck {
 
     public static void saveCheck(TransactionEnum transactionEnum, TransactionDto transactionDto) throws IOException {
@@ -54,6 +56,7 @@ public class BankCheck {
 
         try (FileWriter fileWriter = new FileWriter(fileName);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            log.info("Start writing check...");
             bufferedWriter.append(resultCheck);
         } catch (IOException e) {
             e.printStackTrace();

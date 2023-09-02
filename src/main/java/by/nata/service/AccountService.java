@@ -37,6 +37,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public AccountDto refill(String account, Double sum) {
+        log.info("Call refill() method from service");
         checkArgs(account, sum);
         AccountDto accountDto = dao.get(account);
         AccountDto updateAccountAdo;
@@ -57,6 +58,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public AccountDto withdrawal(String account, Double sum) {
+        log.info("Call withdrawal() method from service");
         checkArgs(account, sum);
         AccountDto accountDto = dao.get(account);
         AccountDto updateAccountDto;
@@ -112,6 +114,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void transferWithinOneBank(String sAccount, String bAccount, Double sum) {
+        log.info("Call transferWithinOneBank() method from service");
         if (isNull(sAccount) || isNull(bAccount) || sum <= 0) {
             throw new IllegalArgumentException(EMPTY_ACCOUNT_OR_AN_INCORRECT_AMOUNT);
         }
@@ -138,6 +141,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public synchronized void transferWithinDifferentBanks(String sAccount, String bAccount, Double sum) {
+        log.info("Call transferWithinDifferentBanks() method from service");
         List<AccountDto> accountDtos = dao.transferWithinDifferentBanks(sAccount, bAccount, BigDecimal.valueOf(sum));
         transactionService.saveTransaction(
                 BigDecimal.valueOf(sum), accountDtos.get(0).id(),
