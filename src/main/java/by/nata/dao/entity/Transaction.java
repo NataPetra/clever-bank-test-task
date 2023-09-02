@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 @Builder(setterPrefix = "with")
@@ -38,11 +38,11 @@ public class Transaction {
     private BigDecimal amount;
 
     @ManyToOne
-    @JoinColumn(name = "account_s_id", nullable = false)
+    @JoinColumn(name = "account_s_id")
     private Account senderAccount;
 
     @ManyToOne
-    @JoinColumn(name = "account_b_id", nullable = false)
+    @JoinColumn(name = "account_b_id")
     private Account beneficiaryAccount;
 
     @Column(name = "transaction_date", nullable = false)

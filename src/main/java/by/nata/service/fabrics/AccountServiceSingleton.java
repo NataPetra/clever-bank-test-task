@@ -14,7 +14,7 @@ public class AccountServiceSingleton {
         if (instance == null) {
             synchronized (AccountServiceSingleton.class) {
                 if (instance == null) {
-                    instance = new AccountService(DaoProvider.getInstance().accountDao());
+                    instance = new AccountService(DaoProvider.getInstance().accountDao(), TransactionServiceSingleton.getInstance());
                 }
             }
         }
