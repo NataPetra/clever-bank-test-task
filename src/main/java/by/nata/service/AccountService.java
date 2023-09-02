@@ -25,10 +25,12 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class AccountService implements IAccountService {
 
+    public static final String WRONG = "Something went wrong";
     private final IAccountDao dao;
 
     private final ITransactionService transactionService;
 
+    public static final String EMPTY_ACCOUNT_OR_AN_INCORRECT_AMOUNT = "You did not enter an account number or an incorrect amount";
     private static final String MESSAGE_FOR_ABSENT_ACCOUNT = "This account number does not exist";
 
     @Override
@@ -45,7 +47,7 @@ public class AccountService implements IAccountService {
                     updateAccountAdo.id(), TransactionEnum.REFILL.toString()
             );
         } else {
-            throw new RuntimeException("Something went wrong");
+            throw new RuntimeException(WRONG);
         }
         return updateAccountAdo;
     }
@@ -54,22 +56,22 @@ public class AccountService implements IAccountService {
     public AccountDto withdrawal(String account, Double sum) {
         checkArgs(account, sum);
         AccountDto accountDto = dao.get(account);
-        AccountDto updateAccountAdo;
+        AccountDto updateAccountDto;
         if (accountDto != null) {
             if (accountDto.amount().compareTo(BigDecimal.valueOf(sum)) < 0) {
                 throw new InsufficientFundsException("You do not have enough funds to write off");
             }
             BigDecimal updatedAmount = accountDto.amount().subtract(BigDecimal.valueOf(sum));
-            updateAccountAdo = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
-            dao.updateAmount(updateAccountAdo);
+            updateAccountDto = new AccountDto(accountDto.id(), accountDto.accountNumber(), updatedAmount);
+            dao.updateAmount(updateAccountDto);
             transactionService.saveTransaction(
-                    updateAccountAdo.amount(), updateAccountAdo.id(),
-                    updateAccountAdo.id(), TransactionEnum.WITHDRAWAL.toString()
+                    updateAccountDto.amount(), updateAccountDto.id(),
+                    updateAccountDto.id(), TransactionEnum.WITHDRAWAL.toString()
             );
         } else {
-            throw new RuntimeException("Something went wrong");
+            throw new RuntimeException(WRONG);
         }
-        return updateAccountAdo;
+        return updateAccountDto;
     }
 
     @Override
@@ -105,9 +107,44 @@ public class AccountService implements IAccountService {
         return checkBillingsDtos;
     }
 
+    @Override
+    public void transferWithinOneBank(String sAccount, String bAccount, Double sum) {
+        if (isNull(sAccount) || isNull(bAccount) || sum <= 0) {
+            throw new IllegalArgumentException(EMPTY_ACCOUNT_OR_AN_INCORRECT_AMOUNT);
+        }
+        if (!dao.isAccountExists(sAccount) || !dao.isAccountExists(bAccount)) {
+            throw new IllegalArgumentException(MESSAGE_FOR_ABSENT_ACCOUNT);
+        }
+        AccountDto withdrawal = dao.get(sAccount);
+        AccountDto refill = dao.get(bAccount);
+        if (withdrawal != null && refill != null) {
+            if (withdrawal.amount().compareTo(BigDecimal.valueOf(sum)) < 0) {
+                throw new InsufficientFundsException("You do not have enough funds to write off");
+            }
+            BigDecimal updatedSAmount = withdrawal.amount().subtract(BigDecimal.valueOf(sum));
+            dao.updateAmount(new AccountDto(withdrawal.id(), withdrawal.accountNumber(), updatedSAmount));
+            BigDecimal updatedBAmount = refill.amount().add(BigDecimal.valueOf(sum));
+            dao.updateAmount(new AccountDto(refill.id(), refill.accountNumber(), updatedBAmount));
+        } else {
+            throw new RuntimeException(WRONG);
+        }
+        transactionService.saveTransaction(
+                BigDecimal.valueOf(sum), withdrawal.id(),
+                refill.id(), TransactionEnum.TRANSFER.toString());
+    }
+
+    @Override
+    public void transferWithinDifferentBanks(String sAccount, String bAccount, Double sum) {
+        List<AccountDto> accountDtos = dao.transferWithinDifferentBanks(sAccount, bAccount, BigDecimal.valueOf(sum));
+        transactionService.saveTransaction(
+                BigDecimal.valueOf(sum), accountDtos.get(0).id(),
+                accountDtos.get(1).id(), TransactionEnum.TRANSFER.toString());
+    }
+
+
     private void checkArgs(String account, Double sum) {
         if (isNull(account) || sum <= 0) {
-            throw new IllegalArgumentException("You did not enter an account number or an incorrect amount");
+            throw new IllegalArgumentException(EMPTY_ACCOUNT_OR_AN_INCORRECT_AMOUNT);
         }
         if (!dao.isAccountExists(account)) {
             throw new IllegalArgumentException(MESSAGE_FOR_ABSENT_ACCOUNT);

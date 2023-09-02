@@ -3,15 +3,20 @@ package by.nata.dao.db;
 import by.nata.dao.api.IAccountDao;
 import by.nata.dao.db.connection.api.IDataSourceWrapper;
 import by.nata.dto.AccountDto;
+import by.nata.dto.TransactionDto;
+import by.nata.exception.InsufficientFundsException;
+import lombok.extern.log4j.Log4j2;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class AccountDaoImpl implements IAccountDao {
 
     private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM clever_bank.account WHERE account_number = ?";
@@ -114,5 +119,71 @@ public class AccountDaoImpl implements IAccountDao {
             throw new RuntimeException("Database connection error", e);
         }
         return accounts;
+    }
+
+    @Override
+    public List<AccountDto> transferWithinDifferentBanks(String sAccount, String bAccount, BigDecimal amount) {
+        List<AccountDto> accountDtos = new ArrayList<>();
+
+        try (Connection connection = dataSourceWrapper.getConnection();
+        ) {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_AMOUNT);
+            preparedStatement.setString(1, sAccount);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            AccountDto sAccountDto = getAccounts(resultSet);
+
+            preparedStatement = connection.prepareStatement(SQL_GET_AMOUNT);
+            preparedStatement.setString(1, bAccount);
+            resultSet = preparedStatement.executeQuery();
+            AccountDto bAccountDto = getAccounts(resultSet);
+
+            Savepoint getAccountsSavePoint = connection.setSavepoint("Get accounts");
+            log.info("Creating savepoint...");
+
+            if (sAccountDto.amount().compareTo(amount) < 0) {
+                throw new InsufficientFundsException("You do not have enough funds to write off");
+            }
+            BigDecimal sUpdatedAmount = sAccountDto.amount().subtract(amount);
+            AccountDto updateSAccountDto = new AccountDto(sAccountDto.id(), sAccountDto.accountNumber(), sUpdatedAmount);
+            accountDtos.add(updateSAccountDto);
+            BigDecimal bUpdatedAmount = bAccountDto.amount().add(amount);
+            AccountDto updateBAccountDto = new AccountDto(bAccountDto.id(), bAccountDto.accountNumber(), bUpdatedAmount);
+            accountDtos.add(updateBAccountDto);
+
+            try {
+                preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT);
+                preparedStatement.setBigDecimal(1, sUpdatedAmount);
+                preparedStatement.setLong(2, sAccountDto.id());
+                preparedStatement.executeUpdate();
+
+                preparedStatement = connection.prepareStatement(SQL_UPDATE_AMOUNT);
+                preparedStatement.setBigDecimal(1, bUpdatedAmount);
+                preparedStatement.setLong(2, bAccountDto.id());
+                preparedStatement.executeUpdate();
+
+                connection.commit();
+            } catch (SQLException e) {
+                log.info("SQLException. Executing rollback to savepoint...");
+                connection.rollback(getAccountsSavePoint);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Database connection error", e);
+        }
+        return accountDtos;
+    }
+
+    private AccountDto getAccounts(ResultSet resultSet) throws SQLException {
+        AccountDto accountDto = null;
+        while (resultSet.next()) {
+            long accountId = resultSet.getLong("account_id");
+            String accountNumber = resultSet.getString("account_number");
+            BigDecimal accountAmount = resultSet.getBigDecimal("amount");
+            accountDto = new AccountDto(accountId, accountNumber, accountAmount);
+        }
+        return accountDto;
     }
 }
