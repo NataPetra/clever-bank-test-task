@@ -134,7 +134,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public void transferWithinDifferentBanks(String sAccount, String bAccount, Double sum) {
+    public synchronized void transferWithinDifferentBanks(String sAccount, String bAccount, Double sum) {
         List<AccountDto> accountDtos = dao.transferWithinDifferentBanks(sAccount, bAccount, BigDecimal.valueOf(sum));
         transactionService.saveTransaction(
                 BigDecimal.valueOf(sum), accountDtos.get(0).id(),

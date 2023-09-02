@@ -3,7 +3,6 @@ package by.nata.dao.db;
 import by.nata.dao.api.IAccountDao;
 import by.nata.dao.db.connection.api.IDataSourceWrapper;
 import by.nata.dto.AccountDto;
-import by.nata.dto.TransactionDto;
 import by.nata.exception.InsufficientFundsException;
 import lombok.extern.log4j.Log4j2;
 

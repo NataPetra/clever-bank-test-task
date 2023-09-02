@@ -5,5 +5,5 @@ import java.sql.Date;
 
 public record TransactionDto(Long id, BigDecimal amount, Date date,
                              String sAccount, String sBank,
-                             String bAccount, String  bBank) {
+                             String bAccount, String bBank) {
 }

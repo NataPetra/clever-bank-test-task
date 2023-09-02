@@ -1,7 +1,5 @@
 package by.nata.service.api;
 
-import by.nata.dto.TransactionDto;
-
 import java.math.BigDecimal;
 
 public interface ITransactionService {
