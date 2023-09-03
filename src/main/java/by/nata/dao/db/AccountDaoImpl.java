@@ -130,12 +130,12 @@ public class AccountDaoImpl implements IAccountDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_AMOUNT);
             preparedStatement.setString(1, sAccount);
             ResultSet resultSet = preparedStatement.executeQuery();
-            AccountDto sAccountDto = getAccounts(resultSet);
+            AccountDto sAccountDto = getAccountDto(resultSet);
 
             preparedStatement = connection.prepareStatement(SQL_GET_AMOUNT);
             preparedStatement.setString(1, bAccount);
             resultSet = preparedStatement.executeQuery();
-            AccountDto bAccountDto = getAccounts(resultSet);
+            AccountDto bAccountDto = getAccountDto(resultSet);
 
             Savepoint getAccountsSavePoint = connection.setSavepoint("Get accounts");
             log.info("Creating savepoint...");
@@ -175,7 +175,7 @@ public class AccountDaoImpl implements IAccountDao {
         return accountDtos;
     }
 
-    private AccountDto getAccounts(ResultSet resultSet) throws SQLException {
+    public AccountDto getAccountDto(ResultSet resultSet) throws SQLException {
         AccountDto accountDto = null;
         while (resultSet.next()) {
             long accountId = resultSet.getLong("account_id");
