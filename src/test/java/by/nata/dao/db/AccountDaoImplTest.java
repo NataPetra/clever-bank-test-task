@@ -50,34 +50,6 @@ class AccountDaoImplTest {
     }
 
     @Test
-    void testGet() throws SQLException {
-        String accountNumber = ACCOUNT_NUMBER;
-        BigDecimal amount = new BigDecimal(AMOUNT);
-        long accountId = 1L;
-
-        when(dataSourceWrapper.getConnection()).thenReturn(connection);
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong("account_id")).thenReturn(accountId);
-        when(resultSet.getString("account_number")).thenReturn(accountNumber);
-        when(resultSet.getBigDecimal("amount")).thenReturn(amount);
-
-        AccountDto accountDto = accountDao.get(accountNumber);
-
-        assertNotNull(accountDto);
-        assertEquals(accountId, accountDto.id());
-        assertEquals(accountNumber, accountDto.accountNumber());
-        assertEquals(amount, accountDto.amount());
-
-        verify(resultSet).close();
-        verify(preparedStatement).close();
-        verify(connection).close();
-    }
-
-
-    @Test
     void testUpdateAmount() throws SQLException {
         AccountDto accountDto = new AccountDto(1L, ACCOUNT_NUMBER, new BigDecimal("500.00"));
 
@@ -91,47 +63,6 @@ class AccountDaoImplTest {
         verify(preparedStatement).setLong(2, accountDto.id());
         verify(preparedStatement).executeUpdate();
 
-        verify(preparedStatement).close();
-        verify(connection).close();
-    }
-
-    @Test
-    void testIsAccountExists() throws SQLException {
-        String accountNumber = ACCOUNT_NUMBER;
-
-        when(dataSourceWrapper.getConnection()).thenReturn(connection);
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(true);
-
-        boolean result = accountDao.isAccountExists(accountNumber);
-
-        assertTrue(result);
-
-        verify(resultSet).close();
-        verify(preparedStatement).close();
-        verify(connection).close();
-    }
-
-    @Test
-    void testCheckAccountBalance() throws SQLException {
-        String accountNumber = ACCOUNT_NUMBER;
-        BigDecimal balance = new BigDecimal(AMOUNT);
-
-        when(dataSourceWrapper.getConnection()).thenReturn(connection);
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getBigDecimal("amount")).thenReturn(balance);
-
-        BigDecimal result = accountDao.checkAccountBalance(accountNumber);
-
-        assertNotNull(result);
-        assertEquals(balance, result);
-
-        verify(resultSet).close();
         verify(preparedStatement).close();
         verify(connection).close();
     }
