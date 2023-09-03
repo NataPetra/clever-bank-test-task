@@ -1,5 +1,19 @@
 version: '3.5'
 services:
+  app-test:
+    build: .
+    image: app-clever-bank-1.0.0
+    container_name: app-test
+    environment:
+      DATABASE_URL: jdbc:mysql://db:3306/clever_bank
+      DATABASE_PASSWORD: postgres
+      DATABASE_USERNAME: postgres
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - clever-bank-test-task_ntwrk
   db:
     build: postgresql
     image: clever-bank-test-task_postgresql:1.0.0

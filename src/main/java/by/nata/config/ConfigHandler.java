@@ -56,11 +56,4 @@ public class ConfigHandler {
         return this.config;
     }
 
-//    public static void main(String[] args) throws IllegalArgumentException,  IOException, SecurityException {
-//        ConfigHandler handler = ConfigHandler.getInstance();
-//        Config config = handler.getConfig();
-//        System.out.println("precent: "+config.getInterestToBeCharged());
-//        config.setInterestToBeCharged(1);
-//        handler.dumpConfig();
-//    }
 }
