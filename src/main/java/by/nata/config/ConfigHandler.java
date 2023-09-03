@@ -8,6 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,6 +19,19 @@ public class ConfigHandler {
     public static final Path configPath = Paths.get("src/main/resources/config.yml");
 
     private static ConfigHandler configHandler;
+
+    //for war version
+//    static {
+//        Path path = null;
+//        try {
+//            URL configUrl = ConfigHandler.class.getResource("/config.yml");
+//            URI configUri = configUrl.toURI();
+//            path = Paths.get(configUri);
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+//        configPath = path;
+//    }
 
     Config config;
 

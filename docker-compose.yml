@@ -5,7 +5,7 @@ services:
     image: app-clever-bank-1.0.0
     container_name: app-test
     environment:
-      DATABASE_URL: jdbc:mysql://db:3306/clever_bank
+      DATABASE_URL: jdbc:mysql://db:5432/clever_bank
       DATABASE_PASSWORD: postgres
       DATABASE_USERNAME: postgres
     ports:
