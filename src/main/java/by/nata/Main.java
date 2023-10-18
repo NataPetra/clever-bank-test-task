@@ -1,8 +1,7 @@
 package by.nata;
 
-import by.nata.scheduler.SchedulerInterest;
 import by.nata.service.api.IAccountService;
-import by.nata.service.fabrics.AccountServiceSingleton;
+import by.nata.service.factory.AccountServiceSingleton;
 import org.quartz.SchedulerException;
 
 import java.util.Scanner;

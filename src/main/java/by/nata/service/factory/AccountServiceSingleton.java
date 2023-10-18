@@ -1,16 +1,18 @@
-package by.nata.service.fabrics;
+package by.nata.service.factory;
 
 import by.nata.dao.provider.DaoProvider;
 import by.nata.service.AccountService;
 import by.nata.service.api.IAccountService;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-@NoArgsConstructor
 public class AccountServiceSingleton {
 
-    private volatile static AccountService instance;
+    private static volatile AccountService instance;
+
+    private AccountServiceSingleton() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static IAccountService getInstance() {
         log.info("Create AccountService instance...");

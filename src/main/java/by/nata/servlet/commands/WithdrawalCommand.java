@@ -2,7 +2,7 @@ package by.nata.servlet.commands;
 
 import by.nata.dto.AccountDto;
 import by.nata.service.api.IAccountService;
-import by.nata.service.fabrics.AccountServiceSingleton;
+import by.nata.service.factory.AccountServiceSingleton;
 import by.nata.servlet.FrontCommand;
 import lombok.extern.log4j.Log4j2;
 

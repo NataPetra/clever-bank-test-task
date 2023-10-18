@@ -2,12 +2,14 @@ package by.nata.service.util;
 
 import by.nata.dao.entity.TransactionEnum;
 import by.nata.dto.TransactionDto;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +18,11 @@ import java.util.Random;
 @Log4j2
 public class BankCheck {
 
+    private BankCheck() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    @SneakyThrows
     public static void saveCheck(TransactionEnum transactionEnum, TransactionDto transactionDto) throws IOException {
 
         File dir = new File("../clever-bank-test-task/check");
@@ -23,7 +30,7 @@ public class BankCheck {
             dir.mkdir();
         }
 
-        final Random random = new Random();
+        final Random random = SecureRandom.getInstanceStrong();
         int nextInt = random.nextInt(1000);
         String fileName = "../clever-bank-test-task/check/check" + nextInt + ".txt";
         String checkExample =

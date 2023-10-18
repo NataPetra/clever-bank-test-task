@@ -1,4 +1,4 @@
-package by.nata.dao.db.connection.fabrics;
+package by.nata.dao.db.connection.factory;
 
 import by.nata.dao.db.connection.DataSourceC3PO;
 import by.nata.dao.db.connection.api.IDataSourceWrapper;

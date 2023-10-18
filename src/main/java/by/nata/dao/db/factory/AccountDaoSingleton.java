@@ -1,8 +1,8 @@
-package by.nata.dao.db.fabrics;
+package by.nata.dao.db.factory;
 
 import by.nata.dao.api.IAccountDao;
 import by.nata.dao.db.AccountDaoImpl;
-import by.nata.dao.db.connection.fabrics.DataSourceSingleton;
+import by.nata.dao.db.connection.factory.DataSourceSingleton;
 import lombok.extern.log4j.Log4j2;
 
 import java.beans.PropertyVetoException;

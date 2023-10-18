@@ -12,12 +12,11 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataSourceC3PO implements IDataSourceWrapper {
-    private static ComboPooledDataSource dataSource;
+    private static final ComboPooledDataSource dataSource = new ComboPooledDataSource();
 
     public DataSourceC3PO(Properties properties) throws PropertyVetoException, FileNotFoundException {
         ConfigHandler handler = ConfigHandler.getInstance();
         Config config = handler.getConfig();
-        dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass(config.getDbDriver());
         dataSource.setJdbcUrl(config.getDbUrl());
         dataSource.setUser(config.getDbUser());

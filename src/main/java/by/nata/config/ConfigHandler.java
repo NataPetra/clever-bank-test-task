@@ -9,10 +9,10 @@ import java.io.InputStream;
 public class ConfigHandler {
 
     private static ConfigHandler configHandler;
-    private Config config;
+    private final Config config;
 
     public static ConfigHandler getInstance() throws FileNotFoundException {
-        if(configHandler == null) {
+        if (configHandler == null) {
             configHandler = new ConfigHandler();
         }
         return configHandler;

@@ -18,6 +18,7 @@ import java.util.List;
 @Log4j2
 public class AccountDaoImpl implements IAccountDao {
 
+    public static final String DATABASE_CONNECTION_ERROR = "Database connection error";
     private final String SQL_GET_AMOUNT = "SELECT account_id, account_number, amount FROM clever_bank.account WHERE account_number = ?";
     private final String SQL_UPDATE_AMOUNT = "UPDATE clever_bank.account SET amount = ? WHERE account_id = ?;";
     private final String SQL_IS_CONTAIN = "SELECT account_id FROM clever_bank.account WHERE account_number = ?;";
@@ -44,7 +45,7 @@ public class AccountDaoImpl implements IAccountDao {
                 accountDto = new AccountDto(accountId, number, amount);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
         return accountDto;
     }
@@ -61,7 +62,7 @@ public class AccountDaoImpl implements IAccountDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
     }
 
@@ -81,7 +82,7 @@ public class AccountDaoImpl implements IAccountDao {
             resultSet.close();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
         return result;
     }
@@ -98,7 +99,7 @@ public class AccountDaoImpl implements IAccountDao {
                 balance = resultSet.getBigDecimal("amount");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
         return balance;
     }
@@ -115,7 +116,7 @@ public class AccountDaoImpl implements IAccountDao {
                 accounts.add(account);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
         return accounts;
     }
@@ -170,7 +171,7 @@ public class AccountDaoImpl implements IAccountDao {
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Database connection error", e);
+            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
         }
         return accountDtos;
     }

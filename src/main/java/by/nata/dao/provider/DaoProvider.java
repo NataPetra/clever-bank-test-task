@@ -2,8 +2,8 @@ package by.nata.dao.provider;
 
 import by.nata.dao.api.IAccountDao;
 import by.nata.dao.api.ITransactionDao;
-import by.nata.dao.db.fabrics.AccountDaoSingleton;
-import by.nata.dao.db.fabrics.TransactionDaoSingleton;
+import by.nata.dao.db.factory.AccountDaoSingleton;
+import by.nata.dao.db.factory.TransactionDaoSingleton;
 import by.nata.dao.provider.api.IDaoProvider;
 
 import java.beans.PropertyVetoException;

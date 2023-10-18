@@ -2,7 +2,7 @@ package by.nata.scheduler;
 
 import by.nata.dto.CheckBillingsDto;
 import by.nata.service.api.IAccountService;
-import by.nata.service.fabrics.AccountServiceSingleton;
+import by.nata.service.factory.AccountServiceSingleton;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
