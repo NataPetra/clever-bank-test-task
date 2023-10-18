@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws SchedulerException {
 
-        SchedulerInterest.getScheduler().start();
+//        SchedulerInterest.getScheduler().start();
 
         Scanner sc = new Scanner(System.in);
         int choice;

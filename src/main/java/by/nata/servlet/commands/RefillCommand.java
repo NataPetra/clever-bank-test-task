@@ -5,8 +5,8 @@ import by.nata.service.api.IAccountService;
 import by.nata.service.fabrics.AccountServiceSingleton;
 import by.nata.servlet.FrontCommand;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class RefillCommand extends FrontCommand {
 
@@ -16,15 +16,27 @@ public class RefillCommand extends FrontCommand {
         accountService = AccountServiceSingleton.getInstance();
     }
     @Override
-    public void process() throws ServletException, IOException {
+    public void process() throws IOException {
         AccountDto refill = accountService.refill(
                 request.getParameter("account"),
                 Double.valueOf(request.getParameter("sum")));
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        out.println("<html>");
+        out.println("<head><title>Refill</title></head>");
+        out.println("<body>");
+
         if (refill != null) {
             request.setAttribute("refill", refill);
-            forward("refill-done");
+            out.println("<h1>Refill Successful</h1>");
+            out.println("<p>Your account has been successfully refilled.</p>");
         } else {
-            forward("refill-is-not-done");
+            out.println("<h1>Refill Error</h1>");
+            out.println("<p>There was an error while refilling your account.</p>");
         }
+
+        out.println("</body>");
+        out.println("</html>");
     }
 }

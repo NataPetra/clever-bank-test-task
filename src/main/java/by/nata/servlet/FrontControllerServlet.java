@@ -22,15 +22,6 @@ public class FrontControllerServlet extends HttpServlet {
         command.process();
     }
 
-    @SneakyThrows
-    @Override
-    protected void doPost(HttpServletRequest request,
-                         HttpServletResponse response) {
-        FrontCommand command = getCommand(request);
-        command.init(getServletContext(), request, response);
-        command.process();
-    }
-
     private FrontCommand getCommand(HttpServletRequest request) {
         try {
             Class type = Class.forName(String.format(

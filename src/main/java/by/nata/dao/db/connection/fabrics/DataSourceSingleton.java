@@ -11,9 +11,10 @@ import java.util.Properties;
 @Log4j2
 public class DataSourceSingleton {
     private static Properties properties;
-    private volatile static IDataSourceWrapper instance;
+    private static volatile IDataSourceWrapper instance;
 
-    public DataSourceSingleton() {
+    private DataSourceSingleton() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static void setProperties(Properties properties) {

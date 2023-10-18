@@ -17,8 +17,8 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
@@ -28,16 +28,31 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
     compileOnly 'org.projectlombok:lombok:1.18.26'
     implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
-    implementation 'org.quartz-scheduler:quartz:2.3.0'
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
     implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.18.0'
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
-    runtimeOnly 'org.postgresql:postgresql:42.6.0'
+    implementation 'org.postgresql:postgresql:42.6.0'
     testImplementation 'org.mockito:mockito-core:5.5.0'
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
-    implementation 'postgresql:postgresql:9.1-901-1.jdbc4'
 
 }
+
+jar {
+    def jars = configurations.runtimeClasspath.files.collect { "lib/$it.name" }
+
+    manifest {
+        attributes 'Main-Class': 'by.nata.Main',
+                'Class-Path': jars.join(' ')
+    }
+}
+
+tasks.register('copyAllDependencies', Copy) {
+    from(configurations.runtimeClasspath.files)
+    into("$buildDir/libs/lib")
+}
+
+jar.dependsOn copyAllDependencies
 
 tasks.test {
     useJUnitPlatform()
