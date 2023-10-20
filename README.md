@@ -31,7 +31,7 @@ Main entities:
    coating).
 7. etc.
 
-## To use the application
+## To use the application (console application)
 
 The console part of the application can be used as follows:
 * clone project from repository
@@ -47,4 +47,48 @@ and then
 ```text
 docker compose up -d db
 ```
-* run the Main.class and perform the necessary operations in the terminal.
+* run the [Main.java](src%2Fmain%2Fjava%2Fby%2Fnata%2FMain.java) and perform the necessary operations in the terminal
+note: you can run the compiled jar file through the Windows console using the command (however, the receipt will not be saved)
+```text
+java -jar clever-bank-test-task-1.0-SNAPSHOT.jar
+```
+
+## To use the application (Tomcat version):
+
+* clone project from repository
+* uncomment the plugin "war" in the file [build.gradle](build.gradle)
+* change dbUrl in file [config.yml](src%2Fmain%2Fresources%2Fconfig.yml)
+* run 
+```text 
+docker compose build 
+```
+```text
+docker compose up -d db
+```
+```text
+docker compose up -d app-test
+```
+* to execute refill operation go to
+
+[http://localhost:8080/app/controller?command=Refill&account=Account-6404&sum=15](http://localhost:8080/app/controller?command=Refill&account=Account-6404&sum=15)
+
+where account - account number you want to refill, sum - the amount you want to refill with
+
+* to execute withdrawal operation go to
+
+[http://localhost:8080/app/controller?command=Withdrawal&account=Account-6404&sum=15](http://localhost:8080/app/controller?command=Withdrawal&account=Account-6404&sum=15)
+
+where account - account number you want to withdrawal, sum - the amount you want to withdrawal with
+
+* to execute transfer operation go to
+
+[http://localhost:8080/app/controller?command=Transfer&sourceAccount=Account-2765&destinationAccount=Account-7700&sum=100.0](http://localhost:8080/app/controller?command=Transfer&sourceAccount=Account-2765&destinationAccount=Account-7700&sum=100.0)
+
+where sourceAccount - account from where you want to transfer money, destinationAccount - account where you want to transfer money, sum - the amount you want to transfer with
+
+## To run integration tests:
+
+* comment line 65 in the file [build.gradle](build.gradle)
+* run [AccountServiceIntegrationTest.java](src%2Ftest%2Fjava%2Fby%2Fnata%2Fservice%2FAccountServiceIntegrationTest.java)
+
+
