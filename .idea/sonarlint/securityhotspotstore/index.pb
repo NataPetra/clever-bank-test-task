@@ -13,8 +13,6 @@ M
 postgresql/ddl/04_account.sql,4\5\45d73814debe39360bf86910a9a8ea0deba99c93
 Q
 !postgresql/ddl/05_transaction.sql,3\5\35d46b0c0106a880ac3360b116be7b770dbc1ad5
-9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 7
 log.log,1\6\16c93d1167446f99a26837c0fdeac6fb73869794
 E
