@@ -1,0 +1,2 @@
+
+CREATE SCHEMA IF NOT EXISTS clever_bank AUTHORIZATION postgres;

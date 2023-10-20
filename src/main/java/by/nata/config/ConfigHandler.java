@@ -11,18 +11,18 @@ public class ConfigHandler {
     private static ConfigHandler configHandler;
     private final Config config;
 
-    public static ConfigHandler getInstance() throws FileNotFoundException {
+    public static ConfigHandler getInstance() {
         if (configHandler == null) {
             configHandler = new ConfigHandler();
         }
         return configHandler;
     }
 
-    private ConfigHandler() throws FileNotFoundException {
+    private ConfigHandler() {
         this.config = loadConfig();
     }
 
-    public Config loadConfig() throws FileNotFoundException {
+    public Config loadConfig() {
         try (InputStream inputStream = getClass().getResourceAsStream("/config.yml")) {
             if (inputStream == null) {
                 throw new FileNotFoundException("config.yml not found in the classpath.");

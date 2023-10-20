@@ -37,8 +37,8 @@ class TransactionDaoImplTest {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
 
         BigDecimal amount = new BigDecimal("100.00");
-        Long sId = 1L;
-        Long bId = 2L;
+        long sId = 1L;
+        long bId = 2L;
         String type = "TRANSFER";
 
         transactionDao.create(amount, sId, bId, type);

@@ -27,11 +27,11 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class AccountService implements IAccountService {
 
-    public static final String WRONG = "Something went wrong";
     private final IAccountDao dao;
 
     private final ITransactionService transactionService;
 
+    public static final String WRONG = "Something went wrong";
     public static final String EMPTY_ACCOUNT_OR_AN_INCORRECT_AMOUNT = "You did not enter an account number or an incorrect amount";
     private static final String MESSAGE_FOR_ABSENT_ACCOUNT = "This account number does not exist";
 

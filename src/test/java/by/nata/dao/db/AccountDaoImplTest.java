@@ -41,12 +41,11 @@ class AccountDaoImplTest {
     private ResultSet resultSet;
 
     public static final String ACCOUNT_NUMBER = "1234567890";
-    public static final String AMOUNT = "1000.00";
     public static final String ACCOUNT_NUMBER_2 = "2345678901";
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

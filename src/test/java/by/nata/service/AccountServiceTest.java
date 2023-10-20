@@ -3,11 +3,11 @@ package by.nata.service;
 import by.nata.dao.api.IAccountDao;
 import by.nata.dao.entity.TransactionEnum;
 import by.nata.dto.AccountDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,6 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
     @InjectMocks
@@ -37,15 +38,10 @@ class AccountServiceTest {
     public static final String S_ACCOUNT = "1234567890";
     public static final String B_ACCOUNT = "2345678901";
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     void testRefill() {
         String accountNumber = ACCOUNT;
-        Double sum = SUM;
+        double sum = SUM;
 
         AccountDto accountDto = new AccountDto(1L, accountNumber, new BigDecimal("500.00"));
 
@@ -69,7 +65,7 @@ class AccountServiceTest {
     @Test
     void testWithdrawal() {
         String accountNumber = ACCOUNT;
-        Double sum = SUM;
+        double sum = SUM;
 
         AccountDto accountDto = new AccountDto(1L, accountNumber, new BigDecimal("500.00"));
 
@@ -108,7 +104,7 @@ class AccountServiceTest {
     void testTransferWithinOneBank() {
         String sAccount = S_ACCOUNT;
         String bAccount = B_ACCOUNT;
-        Double sum = SUM;
+        double sum = SUM;
 
         when(dao.isAccountExists(sAccount)).thenReturn(true);
         when(dao.isAccountExists(bAccount)).thenReturn(true);
@@ -137,7 +133,7 @@ class AccountServiceTest {
     void testTransferWithinDifferentBanks() {
         String sAccount = S_ACCOUNT;
         String bAccount = B_ACCOUNT;
-        Double sum = SUM;
+        double sum = SUM;
 
         AccountDto senderAccount = new AccountDto(1L, sAccount, new BigDecimal("500.00"));
         AccountDto beneficiaryAccount = new AccountDto(2L, bAccount, new BigDecimal("300.00"));
