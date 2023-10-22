@@ -1,8 +1,10 @@
 package by.nata.dao.provider;
 
 import by.nata.dao.api.IAccountDao;
+import by.nata.dao.api.IBankDao;
 import by.nata.dao.api.ITransactionDao;
 import by.nata.dao.db.factory.AccountDaoSingleton;
+import by.nata.dao.db.factory.BankDaoSingleton;
 import by.nata.dao.db.factory.TransactionDaoSingleton;
 import by.nata.dao.provider.api.IDaoProvider;
 
@@ -35,6 +37,16 @@ public class DaoProvider implements IDaoProvider {
         }
     }
 
+    @Override
+    public IBankDao bankDao() {
+        try {
+            return BankDaoSingleton.getInstance();
+        } catch (PropertyVetoException e) {
+            throw new IllegalStateException(e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static IDaoProvider getInstance() {
         if (instance == null) {

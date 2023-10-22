@@ -19,8 +19,6 @@ E
 postgresql/Dockerfile,1\1\11fe7782aabb861a3c9fb7bd066d89fcff32eae6
 L
 postgresql/ddl/02_client.sql,5\e\5e4b899d68fd2abb89251fa2ce02dbe69b631639
-J
-postgresql/ddl/03_bank.sql,a\c\ac9ab48852650bb3e8bcc12f0e726b55a681c6eb
 t
 Dsrc/main/java/by/nata/scheduler/job/InterestCalculationCheckJob.java,1\7\17ddc29dcfecc159f2ef1a4c28063e75b8913193
 f
