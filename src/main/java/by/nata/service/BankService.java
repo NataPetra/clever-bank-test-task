@@ -17,13 +17,18 @@ public class BankService implements IBankService {
 
     @Override
     public void saveBank(BankDto bank) {
-        Bank bankEntity = bankMapper.bankDtoToBank(bank);
-        bankDao.saveBank(bankEntity);
+        if (bank.name() != null) {
+            Bank bankEntity = bankMapper.bankDtoToBank(bank);
+            bankDao.saveBank(bankEntity);
+        }
     }
 
     @Override
     public BankDto getBankById(Long id) {
-        return bankDao.getBankById(id);
+        if (id != null) {
+            return bankDao.getBankById(id);
+        }
+        return null;
     }
 
     @Override
@@ -33,12 +38,16 @@ public class BankService implements IBankService {
 
     @Override
     public void updateBank(BankDto bank) {
-        Bank bankEntity = bankMapper.bankDtoToBank(bank);
-        bankDao.updateBank(bankEntity);
+        if (bank.name() != null) {
+            Bank bankEntity = bankMapper.bankDtoToBank(bank);
+            bankDao.updateBank(bankEntity);
+        }
     }
 
     @Override
     public void deleteBank(Long id) {
-        bankDao.deleteBank(id);
+        if (id != null) {
+            bankDao.deleteBank(id);
+        }
     }
 }

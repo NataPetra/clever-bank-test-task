@@ -20,7 +20,7 @@ public class BankDaoSingleton {
     public static IBankDao getInstance() throws PropertyVetoException, FileNotFoundException {
         log.info("Create BankDaoImpl instance...");
         if (instance == null) {
-            synchronized (AccountDaoSingleton.class) {
+            synchronized (BankDaoSingleton.class) {
                 if (instance == null) {
                     instance = new BankDaoImpl(DataSourceSingleton.getInstance());
                 }

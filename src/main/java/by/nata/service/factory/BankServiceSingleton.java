@@ -18,7 +18,7 @@ public class BankServiceSingleton {
     public static IBankService getInstance() {
         log.info("Create BankService instance...");
         if (instance == null) {
-            synchronized (AccountServiceSingleton.class) {
+            synchronized (BankServiceSingleton.class) {
                 if (instance == null) {
                     instance = new BankService(DaoProvider.getInstance().bankDao(), BankMapper.INSTANCE);
                 }

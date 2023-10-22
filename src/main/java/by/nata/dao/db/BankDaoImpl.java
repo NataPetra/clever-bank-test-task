@@ -24,13 +24,18 @@ public class BankDaoImpl implements IBankDao {
 
     @Override
     public void saveBank(Bank bank) {
-        String insertQuery = "INSERT INTO clever_bank.bank (name) VALUES (?)";
-        try (Connection connection = dataSourceWrapper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, bank.getName());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
+        BankDto bankByName = getBankByName(bank.getName());
+        if (bankByName == null) {
+            String insertQuery = "INSERT INTO clever_bank.bank (name) VALUES (?)";
+            try (Connection connection = dataSourceWrapper.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+                statement.setString(1, bank.getName());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(DATABASE_CONNECTION_ERROR, e);
+            }
+        } else {
+            throw new RuntimeException("Such a bank already exists");
         }
     }
 
@@ -87,26 +92,32 @@ public class BankDaoImpl implements IBankDao {
 
     @Override
     public void updateBank(Bank bank) {
-        String updateQuery = "UPDATE clever_bank.bank SET name = ? WHERE bank_id = ?";
-        try (Connection connection = dataSourceWrapper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(updateQuery)) {
-            statement.setString(1, bank.getName());
-            statement.setLong(2, bank.getId());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        BankDto bankByName = getBankByName(bank.getName());
+        if (bankByName != null) {
+            String updateQuery = "UPDATE clever_bank.bank SET name = ? WHERE bank_id = ?";
+            try (Connection connection = dataSourceWrapper.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+                statement.setString(1, bank.getName());
+                statement.setLong(2, bank.getId());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override
     public void deleteBank(Long id) {
-        String deleteQuery = "DELETE FROM clever_bank.bank WHERE bank_id = ?";
-        try (Connection connection = dataSourceWrapper.getConnection();
-             PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (getBankById(id) != null) {
+            String deleteQuery = "DELETE FROM clever_bank.bank WHERE bank_id = ?";
+            try (Connection connection = dataSourceWrapper.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+                statement.setLong(1, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
