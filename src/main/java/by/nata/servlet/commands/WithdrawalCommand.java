@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 @Log4j2
 public class WithdrawalCommand extends FrontCommand {
 
-    public static final IAccountService accountService;
+    public static IAccountService accountService;
 
     static {
         accountService = AccountServiceSingleton.getInstance();

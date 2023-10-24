@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 
 public class RefillCommand extends FrontCommand {
 
-    public static final IAccountService accountService;
+    public static IAccountService accountService;
 
     static {
         accountService = AccountServiceSingleton.getInstance();
