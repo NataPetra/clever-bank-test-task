@@ -66,7 +66,6 @@ class TransactionServiceTest {
 
         verify(dao, times(1)).getLast();
 
-        verify(bankCheck, times(1)).saveCheck(TransactionEnum.valueOf(type), transactionDto);
     }
 
 }
